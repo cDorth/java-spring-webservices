@@ -7,10 +7,10 @@ Stateless = sem estado entre requisições
 
 100–199 → informação
 
-200–299 → sucesso
-200 → OK
-201 → CREATED
-204 → NO CONTENT
+200–299 → sucesso <br>
+200 → OK <br>
+201 → CREATED <br>
+204 → NO CONTENT <br>
 
 300–399 → redirecionamento
 
