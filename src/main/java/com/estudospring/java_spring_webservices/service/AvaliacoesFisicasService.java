@@ -16,6 +16,8 @@ public class AvaliacoesFisicasService {
     private final IAlunosRepository alunosRepository;
     private final IAvaliacoesFisicasRepository avaliacoesFisicasRepository;
 
+
+    // verificar se o melhor jeito de salvar o elemento é injetando pelo responsavel. @OneToOne
     public void criarAvaliacaoFisica(AvaliacaoFisicaDto avaliacaoFisicaDto) throws NotFoundException,BadRequestException {
         AlunosEntity aluno = alunosRepository.findById(avaliacaoFisicaDto.getAlunoId())
                 .orElseThrow(() -> new NotFoundException("Aluno não encontrado"));

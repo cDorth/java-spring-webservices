@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleBadRequestException(NotFoundException ex){
         ErrorResponse response =  ErrorResponse.builder()
                 .message(ex.getMessage())
-                .status(HttpStatus.BAD_REQUEST.value())
+                .status(HttpStatus.BAD_REQUEST .value())
                 .build();
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
