@@ -2,13 +2,18 @@ package com.estudospring.java_spring_webservices.service;
 
 import com.estudospring.java_spring_webservices.database.model.AlunosEntity;
 import com.estudospring.java_spring_webservices.database.model.AvaliacoesFisicasEntity;
+import com.estudospring.java_spring_webservices.database.model.TreinosEntity;
 import com.estudospring.java_spring_webservices.database.repository.IAlunosRepository;
+import com.estudospring.java_spring_webservices.database.repository.IAvaliacoesFisicasRepository;
+import com.estudospring.java_spring_webservices.database.repository.ITreinosRepository;
 import com.estudospring.java_spring_webservices.dto.AlunoDto;
 import com.estudospring.java_spring_webservices.exception.BadRequestException;
 import com.estudospring.java_spring_webservices.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,6 +21,8 @@ import java.util.Optional;
 public class AlunosService {
 
     private final IAlunosRepository alunosRepository;
+    private final ITreinosRepository treinosRepository;
+    private final IAvaliacoesFisicasRepository avaliacoesFisicasRepository;
 
     public void criarAluno(AlunoDto alunoDto) throws BadRequestException{
         AlunosEntity aluno = alunosRepository.findByEmail(alunoDto.getEmail())
@@ -43,5 +50,24 @@ public class AlunosService {
         }
 
         return avaliacao;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void deletarAluno(Integer alunoId) throws Exception {
+        AlunosEntity aluno = alunosRepository.findById(alunoId)
+                .orElseThrow(() -> new NotFoundException("Aluno não encontrado"));
+
+        //1. deletar treinos do aluno
+        List<Integer> treinosAlunoIds = aluno.getTreinos().stream()
+                .map(TreinosEntity::getId)
+                .toList();
+
+        treinosRepository.deleteAllById(treinosAlunoIds);
+
+        //2. deletar o aluno
+        alunosRepository.deleteById(alunoId);
+
+        //3. deletar avaliação física
+        avaliacoesFisicasRepository.deleteById(aluno.getAvaliacoesFisicas().getId());
     }
 }
