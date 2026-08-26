@@ -5,10 +5,17 @@ import com.estudospring.java_spring_webservices.database.model.AvaliacoesFisicas
 import com.estudospring.java_spring_webservices.database.repository.IAlunosRepository;
 import com.estudospring.java_spring_webservices.database.repository.IAvaliacoesFisicasRepository;
 import com.estudospring.java_spring_webservices.dto.AvaliacaoFisicaDto;
+import com.estudospring.java_spring_webservices.dto.AvaliacoesFisicasProjection;
 import com.estudospring.java_spring_webservices.exception.BadRequestException;
 import com.estudospring.java_spring_webservices.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +42,14 @@ public class AvaliacoesFisicasService {
 
         aluno.setAvaliacoesFisicas(avaliacaoFisica);
         alunosRepository.save(aluno);
+    }
+
+    public List<AvaliacoesFisicasProjection> getAllAvaliacoes(){
+        return avaliacoesFisicasRepository.getAllAvaliacoes();
+    }
+
+    public Page<AvaliacoesFisicasProjection> getAllAvaliacoesPageable(Integer page, Integer size){
+        return avaliacoesFisicasRepository.getAllAvaliacoesPageable(PageRequest.of(page, size));
     }
 
 }
