@@ -1,5 +1,6 @@
 package com.estudospring.java_spring_webservices.handler;
 
+import com.estudospring.java_spring_webservices.exception.BadRequestException;
 import com.estudospring.java_spring_webservices.exception.ErrorResponse;
 import com.estudospring.java_spring_webservices.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,16 @@ public class GlobalExceptionHandler {
         ErrorResponse response =  ErrorResponse.builder()
                 .message(ex.getMessage())
                 .status(HttpStatus.NOT_FOUND.value())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ErrorResponse> handleBadRequestException(NotFoundException ex){
+        ErrorResponse response =  ErrorResponse.builder()
+                .message(ex.getMessage())
+                .status(HttpStatus.BAD_REQUEST.value())
                 .build();
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
